@@ -1,0 +1,203 @@
+<div class="wrapper">
+  <form [formGroup]="registerForm">
+    <div class="registerBlock">
+      <div class="fields">
+        <input
+          type="text"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+        <div
+          *ngIf="
+            registerForm.get('firstName').dirty ||
+            registerForm.get('firstName').touched
+          "
+        >
+          <div *ngIf="registerForm.get('firstName').errors?.required" class="error">
+            First Name is Required
+          </div>
+        </div>
+      </div>
+      <div class="fields">
+        <input type="text" placeholder="Last Name" formControlName="lastName" />
+        <div
+        *ngIf="
+          registerForm.get('lastName').dirty ||
+          registerForm.get('lastName').touched
+        "
+      >
+        <div *ngIf="registerForm.get('lastName').errors?.required" class="error">
+          Last Name is Required
+        </div>
+      </div>
+      </div>
+      <div class="fields">
+        <input type="email" placeholder="Email" formControlName="email" />
+        <div
+        *ngIf="
+          registerForm.get('email').dirty ||
+          registerForm.get('email').touched
+        "
+      >
+        <div *ngIf="registerForm.get('email').errors?.required" class="error">
+          Email is Required
+        </div>
+        <div *ngIf="registerForm.get('email').errors?.email" class="error">
+          Enter valid email
+        </div>
+      </div>
+      </div>
+      <div class="fields">
+        <input
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <div
+        *ngIf="
+          registerForm.get('password').dirty ||
+          registerForm.get('password').touched
+        "
+      >
+        <div *ngIf="registerForm.get('password').errors?.required" class="error">
+          Password is Required
+        </div>
+        <div *ngIf="registerForm.get('password').errors" class="error">
+          Password must be 6 charcter length
+        </div>
+      </div>
+      </div>
+      <div class="fields">
+        <input type="tel" placeholder="Phone Number" formControlName="phone" />
+        <div
+        *ngIf="
+          registerForm.get('phone').dirty ||
+          registerForm.get('phone').touched
+        "
+      >
+        <div *ngIf="registerForm.get('phone').errors?.required" class="error">
+          Phone number is Required
+        </div>
+        <div *ngIf="registerForm.get('phone').errors" class="error">
+          Enter valid phone number
+        </div>
+      </div>
+      </div>
+      <div class="fields">
+        <select formControlName="gender">
+          <option disabled selected value="">Select Gender</option>
+          <option *ngFor="let item of genders" [value]="item">
+            {{ item }}
+          </option>
+        </select>
+        <div
+        *ngIf="
+          registerForm.get('gender').dirty ||
+          registerForm.get('gender').touched
+        "
+      >
+        <div *ngIf="registerForm.get('gender').errors?.required" class="error">
+          Gender is Required
+        </div>
+      </div>
+      </div>
+      <div class="fields cb" *ngIf="isFemale">
+        <label for="">Apply for women's concession ?</label>
+        <input
+          type="checkbox"
+          formControlName="isAWomenConcession"
+          [checked]="isCheckedFemale"
+          (change)="getConcessionFlag($event)"
+        />
+      </div>
+      <div class="fields cb">
+        <label for="">Are you married ?</label>
+        <input
+          type="checkbox"
+          formControlName="isMarried"
+          [checked]="isCheckedMarried"
+          (change)="getMarriedFlag($event)"
+        />
+      </div>
+      <div class="fields" *ngIf="isMarriedFlag">
+        <input
+          type="text"
+          placeholder="Enter Spouse Name"
+          formControlName="spouseName"
+        />
+        <div
+        *ngIf="
+          registerForm.get('spouseName').dirty ||
+          registerForm.get('spouseName').touched
+        "
+      >
+        <div *ngIf="registerForm.get('spouseName').errors?.required" class="error">
+          Spouse name is Required
+        </div>
+      </div>
+      </div>
+      <div class="fields" *ngIf="!isMarriedFlag">
+        <input
+          type="text"
+          placeholder="Enter Father Name"
+          formControlName="fatherName"
+        />
+        <div
+        *ngIf="
+          registerForm.get('fatherName').dirty ||
+          registerForm.get('fatherName').touched
+        "
+      >
+        <div *ngIf="registerForm.get('fatherName').errors?.required" class="error">
+          Father name is Required
+        </div>
+      </div>
+      </div>
+      <div class="addressBlock" formArrayName="address">
+        <button type="button" class="addBtn" title="Add Address" (click)="addAddress()">+</button>
+        <div class="address"
+          *ngFor="let item of addressListArray.controls; let i = index"
+          [formGroupName]="i"
+        >
+        <div class="fields">
+          <input type="text" placeholder="Street" formControlName="street" />
+          <div *ngIf="isAddressInvalid(i, 'street')">
+            <div *ngIf="getAddressControl(i, 'street')?.errors" class="error">
+              Street is Required
+            </div>
+          </div>
+
+        </div>
+        <div class="fields">
+          <input type="text" placeholder="City" formControlName="city" />
+          <div *ngIf="isAddressInvalid(i, 'city')">
+            <div *ngIf="getAddressControl(i, 'city')?.errors" class="error">
+              City is Required
+            </div>
+          </div>
+        </div>
+
+        <div class="fields">
+          <input type="text" placeholder="State" formControlName="state" />
+          <div *ngIf="isAddressInvalid(i, 'state')">
+            <div *ngIf="getAddressControl(i, 'state')?.errors" class="error">
+              State is Required
+            </div>
+          </div>
+        </div>
+
+          <button class="removeBtn" *ngIf="i!==0" title="Remove Address" (click)="removeAddress(i)">x</button>
+        </div>
+      </div>
+      <button
+      type="submit"
+      class="registerBtn"
+      [disabled]="!registerForm.valid"
+      (click)="register(registerForm.value)"
+    >
+      Register
+    </button>
+    </div>
+
+  </form>
+</div>
